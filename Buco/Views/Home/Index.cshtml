@@ -1,8 +1,170 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model Buco.ViewModels.HomePageViewModel
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@if (SignInManager.IsSignedIn(User))
+{
+<div class="wrapper">
+    @if (Model != null && (Model.CrudInfo.Added) || (Model.CrudInfo.Deleted) || (Model.CrudInfo.Updated))
+    {
+        <div class="alert alert-dismissible alert-primary">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3 class="text-center">@Model.MsgToDisplay</h3>
+        </div>
+    }
+    @if (Model != null && Model.CrudInfo.Error)
+    {
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3 class="text-center">@Model.MsgToDisplay</h3>
+        </div>
+    }
+    @if (Model != null && Model.GoalReached)
+    {
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3 class="text-center"><strong>Well done!</strong> Your pet has reached it's @Model.GoalText!</h3>
+        </div>
+    }
+    <h2>Welcome!</h2>
+    <h5>Welcome to your home page, here you can add new weight, activity or meal entries, manage your pets or view inputed data.</h5>
+    <hr />
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <h3 class="card-header">Manage pets</h3>
+                <div class="card-body">
+                    <h6 class="card-title">Update, delete or create pets.</h6>
+                    <div class="text-center text-primary">
+                        <i class="fas fa-cat fa-10x"></i>
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg" asp-action="Index" asp-controller="Pets">My pets</a>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h3 class="card-header">Enter a meal</h3>
+                <div class="card-body">
+                    <h6 class="card-title">Enter a new meal for one of your pets.</h6>
+                    <div class="text-center text-primary">
+                        <i class="fas fa-utensils fa-10x"></i>
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg" asp-action="Create" asp-controller="MealEntries">Add a meal</a>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h3 class="card-header">Enter mesured weight</h3>
+                <div class="card-body">
+                    <h6 class="card-title">Enter a new mesured weight for your pets.</h6>
+                    <div class="text-center text-primary">
+                        <i class="fas fa-weight fa-10x"></i>
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg" asp-action="Create" asp-controller="WeightEntries">Add new weight</a>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <h3 class="card-header">Add new activty entry</h3>
+                <div class="card-body">
+                    <h6 class="card-title">Enter a new activity entry.</h6>
+                    <div class="text-center text-primary">
+                        <i class="fas fa-burn fa-10x"></i>
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg" asp-action="Create" asp-controller="ActivityEntries">Add new activity</a>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h3 class="card-header">Manage entries</h3>
+                <div class="card-body">
+                    <h6 class="card-title">Manage latest entries.</h6>
+                    <div class="text-center text-primary">
+                        <i class="fas fa-th-list fa-10x"></i>
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg" asp-action="Index" asp-controller="EditEntries">Latest entries</a>
+                        </div>
+                    </div>                 
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h3 class="card-header">View entry data</h3>
+                <div class="card-body">
+                    <h6 class="card-title">View your pets meals, activity and weight.</h6>
+                    <div class="text-center text-primary">
+                        <i class="fas fa-chart-line fa-10x"></i>
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg" asp-action="Index" asp-controller="GetEntries">View entries</a>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+}
+else
+{
+    <div class="wrapper">
+        <h1 class="display-3">Welcome to Chubster!</h1>
+        <p class="lead">
+            Does your pet have weight problems? Are you not sure if they are getting enough exercise?
+            Chubster is a web application that helps you keep track of your pets weight.
+            You can keep track of your pets weight, calorie intake and daily excersize.
+        </p>
+        <a class="btn btn-link" asp-action="Info" asp-controller="Home">Click here to find out more!</a>
+        <hr class="my-4">
+        <div class="text-center">
+            <p>To use Chubster you must log in first! If don't have an account, be free to register!</p>
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <h3 class="card-header">Login</h3>
+                        <div class="card-body">
+                            <h6 class="card-subtitle text-muted">Login using an existing account</h6>
+                        </div>
+                        <img style="width: 100%; display: block;" src="~/images/pug.png" alt="Login">
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <h3 class="card-header">Register</h3>
+                        <div class="card-body">
+                            <h6 class="card-subtitle text-muted">Register to start using Chubster</h6>
+                        </div>
+                        <img style="width: 100%; display: block;" src="~/images/PersonFeedsCatByDumpingKibbleIntoDishCatLicksOwnFace.jpg.653x0_q80_crop-smart.jpg" alt="Register">
+                        <div class="card-body">
+                            <a class="btn btn-primary btn-lg text-white" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+

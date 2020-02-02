@@ -1,0 +1,68 @@
+﻿@model Buco.ViewModels.GetEntriesViewModel
+@{
+    ViewData["Title"] = "My pets' entries";
+}
+
+<div class="wrapper">
+    @if (Model != null && Model.Error)
+    {
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Invalid date input! End date must be greater than start date!
+        </div>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-link"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>View my entries!</h2>
+    <br />
+    @if (ViewBag.NoPets)
+    {
+        <div class="text-center">
+            <p></p>
+            <i class="fas fa-chart-line text-muted" style="font-size:300px"></i>
+            <p></p>
+            <h1 class="text-primary">You don't have any pets!</h1>
+            <p>To view entries, you first need to create a pet!</p>
+            <p><a asp-action="Create" asp-controller="Pets">Create a new pet!</a></p>
+        </div>
+    }
+    else
+    {
+        <p>Please select entries you want to view</p>
+        <div class="row">
+            <div class="col-4">
+                <form asp-action="FilterEntries" asp-controller="GetEntries">
+                    <div class="form-group">
+                        <label for="petId" class="control-label">Pet</label>
+                        <select for="petId" name="petId" class="form-control" asp-items="@Model.DropDownPets"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="entryType" class="control-label">Entry type</label>
+                        <select id="entryType" class="form-control" name="entryType">
+                            <option value="Meal entries">Meal entries</option>
+                            <option value="Weight entries">Weight entries</option>
+                            <option value="Activity entries">Activity entries</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate" class="control-label">Start date</label>
+                        <input name="startDate" id="startDate" class="form-control" type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate" class="control-label">End date</label>
+                        <input name="endDate" id="endDate" class="form-control" type="date" />
+                    </div>
+                    <div class="form-group">
+                        <div class="text-center">
+                            <input type="submit" value="Find entries" class="btn btn-primary" />
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-8">
+                <img style="width: 100%; display: block;" src="~/images/5384730164_bc1b3a62cc_b.jpg" class="img-fluid" />
+            </div>
+        </div>
+    }
+</div>

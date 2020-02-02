@@ -1,0 +1,112 @@
+﻿@using System.Linq
+@using Newtonsoft.Json
+@model Buco.ViewModels.WeightEntriesViewModel
+@{
+    ViewData["Title"] = "Weight entries";
+    var jsonSettings = new JsonSerializerSettings();
+    jsonSettings.DateFormatString = "MM/dd/yyyy";
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeightEntries.Select(x => x.WeightTime.Date).ToList(), jsonSettings);
+    var YLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeightEntries.Select(x => x.MesuredWeight).ToList());
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="GetEntries" class="btn btn-link"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    @if (Model.WeightEntries.Count() != 0)
+    {
+        <h2>Weight entry diary</h2>
+        <br />
+        <h3 class="text-primary">Pet's weight goal: @Model.WeightGoal kgs</h3>
+        <div class="chartBody" style="width:75%">
+            <canvas id="chart"></canvas>
+        </div>
+        <br />
+        <table class="table table-hover table-primary">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Mesured weight
+                    </th>
+                    <th>
+                        Distance from weight goal
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in Model.WeightEntries)
+                {
+                    var distanceFromGoal = entry.MesuredWeight - Model.WeightGoal;
+                    <tr>
+                        <th>
+                            @entry.WeightTime.ToShortDateString()
+                        </th>
+                        <th>
+                            @entry.MesuredWeight kgs
+                        </th>
+                        @if (Math.Round(distanceFromGoal) >= 5)
+                        {
+                            <th class="text-danger">@Math.Round(distanceFromGoal, 3) kgs</th>
+                        }
+                        else
+                        {
+                            <th class="text-success">@Math.Round(distanceFromGoal, 3) kgs</th>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="text-center">
+            <h2 class="text-primary">There are no weight entries for given input!</h2>
+            <i class="fas fa-chart-line text-muted img-fluid" style="font-size:250px;"></i>
+            <br />
+            <p>We couldn't find any weight entries that satisfy given input filters.</p>
+            <a asp-action="Index" asp-controller="GetEntries">Change a few things up and try again!</a>
+            <hr />
+            <p>Don't have any weight entries for your pets?</p>
+            <a asp-action="Create" asp-controller="WeightEntries">Add a new weight entry!</a>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+        var chartData = {
+        labels: @Html.Raw(XLabels),
+        datasets: [{
+            label: 'Pet weight in kgs',
+            backgroundColor: Chart.helpers.color('rgb(169, 145, 212)').alpha(0.5).rgbString(),
+            borderColor: 'rgb(89, 49, 150)',
+            data: @Html.Raw(YLabels),
+        }]
+    };
+
+    window.onload = function () {
+        var ctx = document.getElementById('chart').getContext('2d');
+        window.chart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'My pets weight',
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0
+                        },
+                    }]
+                }
+            }
+        });
+    };
+</script>

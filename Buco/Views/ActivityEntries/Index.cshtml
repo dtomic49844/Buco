@@ -1,0 +1,114 @@
+﻿@using System.Linq
+@using Newtonsoft.Json
+@model Buco.ViewModels.ActivityEntriesPerDayViewModel
+@{
+    var jsonSettings = new JsonSerializerSettings();
+    jsonSettings.DateFormatString = "MM/dd/yyyy";
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ActivityEntries.Select(x => x.Date.Date).ToList(), jsonSettings);
+    var YLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ActivityEntries.Select(x => x.ActivitySum).ToList());
+    ViewData["Title"] = "Activity entries";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="GetEntries" class="btn btn-link"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    @if (Model.ActivityEntries.Count() != 0)
+    {
+        <h2>Activity entry diary</h2>
+        <br />
+        <h3 class="text-primary">Pet's daily activity goal: @Model.ActivityGoal minutes</h3>
+        <div class="chartBody" style="width:75%">
+            <canvas id="chart"></canvas>
+        </div>
+        <br />
+        <table class="table table-hover table-primary">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Total activity time
+                    </th>
+                    <th>
+                        Daily goal reached?
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in Model.ActivityEntries)
+                {
+                    var distanceFromGoal = entry.ActivitySum - Model.ActivityGoal;
+                    <tr>
+                        <th>
+                            @entry.Date.ToShortDateString()
+                        </th>
+                        <th>
+                            @entry.ActivitySum minutes
+                        </th>
+                        @if (distanceFromGoal >= 0)
+                        {
+                            <th class="text-success">Goal reached! <i class="fas fa-check"></i> @distanceFromGoal</th>
+
+                        }
+                        else
+                        {
+                            <th class="text-danger">Daily goal hasn't been reached! <i class="fas fa-times"></i> Missing @Math.Abs(distanceFromGoal) minutes</th>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="text-center">
+            <h2 class="text-primary">There are no activity entries for given input!</h2>
+            <i class="fas fa-chart-line text-muted img-fluid" style="font-size:250px;"></i>
+            <br />
+            <p>We couldn't find any activity entries that satisfy given input filters.</p>
+            <a asp-action="Index" asp-controller="GetEntries">Change a few things up and try again!</a>
+            <hr />
+            <p>Don't have any activity entries for your pets?</p>
+            <a asp-action="Create" asp-controller="ActivityEntries">Add a new meal entry!</a>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+        var chartData = {
+        labels: @Html.Raw(XLabels),
+        datasets: [{
+            label: 'Minutes of activity',
+            backgroundColor: Chart.helpers.color('rgb(169, 145, 212)').alpha(0.5).rgbString(),
+            borderColor: 'rgb(89, 49, 150)',
+            data: @Html.Raw(YLabels),
+        }]
+    };
+
+    window.onload = function () {
+        var ctx = document.getElementById('chart').getContext('2d');
+        window.chart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'My pets activity',
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0
+                        },
+                    }]
+                }
+            }
+        });
+    };
+</script>

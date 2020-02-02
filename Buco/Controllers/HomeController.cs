@@ -1,21 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Buco.Models;
+using Buco.ViewModels;
 
 namespace Buco.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string msgToDisplay, string goalText, bool goalReached = false,
+            bool added = false, bool deleted = false, bool updated = false,
+            bool error = false)
         {
-            return View();
+            var model = new HomePageViewModel
+            {
+                MsgToDisplay = msgToDisplay,
+                GoalReached = goalReached,
+                GoalText = goalText
+            };
+            model.CrudInfo.Added = added;
+            model.CrudInfo.Deleted = deleted;
+            model.CrudInfo.Updated = updated;
+            model.CrudInfo.Error = error;
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Info()
         {
             return View();
         }

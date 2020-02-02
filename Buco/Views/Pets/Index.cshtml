@@ -1,0 +1,174 @@
+﻿@using System;
+@model Buco.ViewModels.PetsViewModel
+@{ 
+    ViewData["Title"] = "My pets";
+    var activity = "High";
+    var spayed = "No";
+}
+<div class="wrapper">
+    @if (Model != null && Model.CrudInfo.Updated)
+    {
+        <div class="alert alert-dismissible alert-primary">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3 class="text-center">Your pets information has successfully been updated!</h3>
+        </div>
+    }
+    @if (Model != null && Model.CrudInfo.Deleted)
+    {
+        <div class="alert alert-dismissible alert-primary">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3 class="text-center">Your pet has successfully been deleted.</h3>
+        </div>
+    }
+    @if (Model != null && Model.CrudInfo.Error)
+    {
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3 class="text-center"><strong>Oh no!</strong> An error has occurred. <a asp-action="Create" asp-controller="Pets">Please try again!</a></h3>
+        </div>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-link"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>My pets</h2>
+    <br />
+    <a asp-action="Create" asp-controller="Pets" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> New pet</a>
+    @if (Model.Pets.Count() != 0)
+    {
+        <br />
+        <hr />
+        @foreach (var pet in @Model.Pets)
+        {
+            <div class="card border-primary mb-3">
+                <h3 class="card-header">@pet.PetName</h3>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-6 text-right">
+                                    <form asp-action="Edit" method="get" asp-route-id="@pet.PetId">
+                                        <input type="hidden" name="id" value="@pet.PetId" />
+                                        <input type="hidden" name="page" value="@Model.PagingInfo.CurrentPage" />
+                                        <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-edit"></i> Edit</button>
+                                    </form>                                    
+                                </div>
+                                <div class="col-6 text-left">
+                                    <form asp-action="Delete" method="post"
+                                          asp-route-id="@pet.PetId"
+                                          onclick="return confirm('Are you sure you want to delete @pet.PetName')">
+                                        <input type="hidden" name="id" value="@pet.PetId" />
+                                        <input type="hidden" name="page" value="@Model.PagingInfo.CurrentPage" />
+                                        <button type="submit" class="btn btn-danger btn-lg" title="Delete"><i class="fas fa-trash"></i> Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr />
+                            <h5 class="text-primary">Pet info:</h5>
+                            <ul>
+                                <li>
+                                    @if (pet.Gender == "Female")
+                                    {
+                                        <i class="fas fa-venus text-danger"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-mars text-info"></i>
+                                    }
+                                </li>
+                                <li>
+                                    <strong>DOB: </strong>@pet.DOB.ToShortDateString()
+                                </li>
+                                <li>
+                                    @if (pet.ActivityLevel == 1)
+                                    {
+                                        activity = "Low";
+                                    }
+                                    else if (pet.ActivityLevel == 2)
+                                    {
+                                        activity = "Medium";
+                                    }
+                                    <strong>Activity level: </strong>@activity
+                                </li>
+                                <li>
+                                    <strong>BCS: </strong>@pet.BodyConditionScore
+                                </li>
+                                <li>
+                                    @if (pet.Spayed)
+                                    {
+                                        spayed = "Yes";
+                                    }
+                                    <strong>Spayed?</strong> @spayed
+                                </li>
+                            </ul>
+                            <hr />
+                            <h5 class="text-primary">My pets goals:</h5>
+                            <ul>
+                                <li>
+                                    <strong>Weight goal: </strong>@pet.TargetWeight kilograms
+                                </li>
+                                <li>
+                                    <strong>Daily calorie goal: </strong>@pet.TargetCalories kcal
+                                </li>
+                                <li>
+                                    <strong>Daily activity goal: </strong>@pet.TargetActivity minutes
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-8">
+                            @if (pet.Photo != null)
+                            {
+                                <img class="img-fluid" style="width:100%;display:block" src="@Url.Content("~")/images/pets/@pet.Photo" />
+                            }
+                            else
+                            {
+                                <div class="col-4"></div>
+                                <i class="fas fa-paw text-muted text-center" style="font-size:300px"></i>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+        <br />
+        <div class="row">
+            <div class="col-6 text-right">
+                @if (@Model.PagingInfo.CurrentPage > 1)
+                {
+                    <a href='@Url.Action("Index", new { id = Model.PagingInfo.CurrentPage - 1})'
+                       class='btn btn-primary btn-lg text-white'>
+                        &laquo;
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-primary btn-lg disabled">
+                        &laquo;
+                    </a>
+                }
+            </div>
+            <div class="col-6 text-left">
+                @if (@Model.PagingInfo.CurrentPage < @Model.PagingInfo.TotalPages)
+                {
+                    <a href='@Url.Action("Index", new { id = Model.PagingInfo.CurrentPage + 1})'
+                       class='btn btn-primary btn-lg text-white'>
+                       &raquo;
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-primary btn-lg disabled">&raquo;</a>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <p></p>
+            <i class="fas fa-cat text-muted" style="font-size:300px"></i>
+            <p></p>
+            <h1 class="text-primary">You don't have any pets!</h1>
+            <p><a asp-action="Create" asp-controller="Pets">Create a new pet!</a></p>
+        </div>
+    }
+</div>

@@ -1,0 +1,104 @@
+﻿@model Buco.Models.Pet
+@{
+    ViewData["Title"] = "Create new pet";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="Pets"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>Create a new pet!</h2>
+    <br />
+    <div class="row">
+        <div class="col-4">
+            <form asp-action="Create" method="post" enctype='multipart/form-data'>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="PetTypeId" class="control-label"></label>
+                    <select asp-for="PetTypeId" class="form-control" asp-items="ViewBag.PetTypeId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PetName" class="control-label"></label>
+                    <input asp-for="PetName" class="form-control" />
+                    <span asp-validation-for="PetName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Gender" class="control-label"></label>
+                    <select asp-for="Gender" class="form-control">
+                        <option value="Female">
+                            Female
+                        </option>
+                        <option value="Male">
+                            Male
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DOB" class="control-label"></label>
+                    <input asp-for="DOB" id="DOB" class="form-control" type="date" />
+                    <span asp-validation-for="DOB" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ActivityLevel" class="control-label"></label>
+                    <select asp-for="ActivityLevel" class="form-control">
+                        <option value="1">
+                            Less than 30 minutes of activity daily
+                        </option>
+                        <option value="2">
+                            From 30 to 60 minutes of activity daily
+                        </option>
+                        <option value="3">
+                            More than 60 minutes of activity daily
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BodyCondtionScore" class="control-label"></label>
+                    <button type="button" class="btn btn-link" onclick="showBCSHelp()"><i class="fas fa-question"></i> Help</button>
+                    <input asp-for="BodyCondtionScore" id="bcsIn" type="range" class="custom-range" min="1" max="9" value="1" oninput="bcsOut.value = bcsIn.value" />
+                    <output id="bcsOut"></output>
+                    <span asp-validation-for="BodyCondtionScore" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Spayed" class="control-label"></label>
+                    <input asp-for="Spayed" class="form-control" />
+                    <span asp-validation-for="Spayed" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="weight" class="control-label">Current weight</label>
+                    <input id="weight" name="weight" type="number" min="0.1" max="200" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="photoPath">Pet photo</label>
+                    <input name="file" type="file" class="form-control-file" id="photoPath" aria-describedby="fileHelp" >
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <input type="submit" value="Create new pet" class="btn btn-primary" />
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-danger">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-8" id="imageDiv">
+            <img src="~/images/gatto-persiano-color-crema-con-viste-perturbate-del-fronte-55522452.jpg" class="img-fluid" />            
+        </div>
+        <div class="col-8" id="infoDiv" style="display:none">
+            <img class="img-fluid" style="width: 100%; display: block;" src="~/images/Systems-for-scoring-of-BCS-of-dogs-and-cats-SHAPE-Size-Health-And-Physical.png" />
+            <p></p>
+            <a href="https://www.thedrakecenter.com/services/pets/blog/fit-or-fat-your-pets-body-condition-score-bcs"> Still not sure? Click here to learn more</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    function showBCSHelp() {
+        $('#imageDiv').fadeOut();
+        $('#infoDiv').fadeIn();
+    }
+</script>

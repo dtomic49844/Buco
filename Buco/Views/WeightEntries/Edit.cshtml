@@ -1,0 +1,38 @@
+﻿@model Buco.Models.WeightEntry
+@{
+    ViewData["Title"] = "Edit weight entry";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="EditEntries" asp-route-id="@ViewBag.Page"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>Edit weight entry</h2>
+    <br />
+    <div class="row">
+        <div class="col-4">
+            <form asp-action="Edit" asp-controller="WeightEntries" method="post" asp-route-weightEntryId="@Model.WeightEntryId" asp-route-page="@ViewBag.Page">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="WeightEntryId" />
+                <input type="hidden" asp-for="WeightTime" />
+                <div class="form-group">
+                    <label asp-for="MesuredWeight" class="control-label"></label>
+                    <input asp-for="MesuredWeight" class="form-control" />
+                    <span asp-validation-for="MesuredWeight" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="PetId" />
+                <div class="form-group">
+                    <div class="text-center">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a asp-action="Index" asp-controller="EditEntries" asp-route-id="@ViewBag.Page" class="btn btn-danger">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

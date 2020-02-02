@@ -1,0 +1,56 @@
+﻿@model Buco.Models.WeightEntry
+@{
+    ViewData["Title"] = "Create weight entry";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="Home"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>Create a new weight entry!</h2>
+    <br />
+    @if (ViewBag.NoPets)
+    {
+        <div class="text-center">
+            <p></p>
+            <i class="fas fa-weight text-muted" style="font-size:300px"></i>
+            <p></p>
+            <h1 class="text-primary">You don't have any pets!</h1>
+            <p>To start creating weight entries, you first need to create a pet!</p>
+            <p><a asp-action="Create" asp-controller="Pets">Create a new pet!</a></p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="PetId" class="control-label"></label>
+                        <select asp-for="PetId" class="form-control" asp-items="ViewBag.PetId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MesuredWeight" class="control-label"></label> (in kilograms)
+                        <input asp-for="MesuredWeight" class="form-control" />
+                        <span asp-validation-for="MesuredWeight" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="text-center">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-8">
+                <img class="img-fluid" style="width: 100%; display: block;" src="~/images/252_21023_1.jpg" />
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,83 @@
+﻿@model Buco.ViewModels.PetViewModel
+@{ 
+    ViewData["Title"] = "Pet information";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+<div class="wrapper">
+    <h1>Success!</h1>
+    <h6>Your new pet @Model.PetName has successfully been created and added to the system.</h6>
+    <p>
+        Based on your given data about your pet, we calculated your pets meal, weight and activity goals. <button type="button" onclick="showGoalInfo()" class="btn btn-link">What are these goals?</button>
+    </p>
+    <hr/>
+    <div id="goalDetails" style="display:none">
+        <p>
+            <text>
+                Your pet needs to eat a certain amount of calories per day. The amount of calories your pet needs to eat is calculated based on it's body condition score, age, activity level and weather or not your pet is spayed.
+                To meet all of your pets nutritional needs, you shouldn't give more calories to your pet than calculated.
+                This will prevent your pet from gaining weight, while still satisfying all of their nutritional needs.
+            </text>
+            <text>
+                Your pet needs to weight a certain amount. We've calculated target weight for your pet.
+                For best health, your pet should try to reach our targeted weight and maintain it.
+            </text>
+            <text>
+                Your pet needs to excersise. Based on your inputed data, we have calculated how many minutes of daily activity shpuld your pet get to stay healthy and happy.
+            </text>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary" onclick="closeGoalInfo()">Got it</button>
+            </div>
+        </p>
+    </div>
+    <div class="text-center text-primary">
+        <h3>Your pets meal goal: @Model.TargetCalories kcal per day</h3>
+        <h3>Your pets weight goal: @Model.TargetWeight kilograms</h3>
+        <h3>Your pets activity goal: @Model.TargetActivity minutes per day</h3>
+    </div>
+    <hr />
+    <p>
+        Based on your given information, your pet is currently:
+        @if (Model.BodyConditionScore >= 6 && Model.BodyConditionScore <= 7)
+        {
+            <div class="alert alert-danger">
+                <h4 class="text-center"><strong>Your pet is overweight!</strong> They should loose some weight. We've calculated your pets' target weight.</h4>
+            </div>
+        }
+        else if (Model.BodyConditionScore >= 8)
+        {
+            <div class="alert alert-danger">
+                <h4 class="text-center"><strong>Your pet is obese!</strong> Your pet should loose weight! They are obese and need to loose weight for them to stay healthy! We've calculated your pets' target weight.</h4>
+            </div>
+        }
+        else if (Model.BodyConditionScore <= 3)
+        {
+            <div class="alert alert-danger">
+                <h4 class="text-center"><strong>Your pet is underweight!</strong> They should gain some weight for them to stay healthy! We've calculated your pets' target weight.</h4>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-dismissible alert-success">
+                <h4 class="text-center"><strong>Your pet is ideal!</strong> Your pet doesn't need to gain or loose any weight! Keep up the good work! </h4>
+            </div>
+        }
+    </p>
+    <p>
+        You can always change your pets weight, meal and activity goals if you wish. You can do so by editing your pets' information.
+        These goals are here as a guideline, we reccomand that you should follow them, howerever you can change them when ever you like.
+    </p>
+    <div class="text-center">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Got it</a>
+    </div>
+</div>
+
+<script>
+    function showGoalInfo() {
+        $('#goalDetails').fadeIn();
+    }
+
+    function closeGoalInfo() {
+        $('#goalDetails').fadeOut();
+    }
+</script>

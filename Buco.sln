@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buco", "Buco\Buco.csproj", "{57947A89-39A8-4DC9-93AC-B9B243FF7892}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buco", "Buco\Buco.csproj", "{57947A89-39A8-4DC9-93AC-B9B243FF7892}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BucoDesktop", "BucoDesktop\BucoDesktop.csproj", "{33F5C3B5-05FC-42D9-9C5F-BF668F9E1DDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BucoUnitTest", "BucoUnitTest\BucoUnitTest.csproj", "{DA0BD88F-1D69-46A3-BFDF-0FB3ED5A1E71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{57947A89-39A8-4DC9-93AC-B9B243FF7892}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57947A89-39A8-4DC9-93AC-B9B243FF7892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57947A89-39A8-4DC9-93AC-B9B243FF7892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33F5C3B5-05FC-42D9-9C5F-BF668F9E1DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33F5C3B5-05FC-42D9-9C5F-BF668F9E1DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33F5C3B5-05FC-42D9-9C5F-BF668F9E1DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33F5C3B5-05FC-42D9-9C5F-BF668F9E1DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA0BD88F-1D69-46A3-BFDF-0FB3ED5A1E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA0BD88F-1D69-46A3-BFDF-0FB3ED5A1E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA0BD88F-1D69-46A3-BFDF-0FB3ED5A1E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA0BD88F-1D69-46A3-BFDF-0FB3ED5A1E71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

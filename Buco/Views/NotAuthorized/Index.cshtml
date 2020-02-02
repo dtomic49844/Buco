@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Not authorized";
+}
+<div class="wrapper">
+    @if (SignInManager.IsSignedIn(User))
+    {
+    <div class="text-center">
+        <h1>You are authorized to view this page, since you've been logged in.</h1>
+        <img src="~/images/Blog-Exercising-Cats-650.jpeg" class="img-fluid" />
+    </div>
+    }
+    else
+    {
+    <div class="text-center">
+        <h2 class="text-danger">You are not authorized to view this page! <i class="fas fa-times text-danger"></i></h2>
+        <p>To view this page, you need to <a  asp-area="Identity" asp-page="/Account/Login">login!</a></p>
+        <p>If you don't have an account, you can <a  asp-area="Identity" asp-page="/Account/Register">register!</a></p>
+        <img src="~/images/770934_0bb155aef05f4e44a810fb251ecae776~mv2.jpg" class="img-fluid" />
+    </div>
+    }
+</div>

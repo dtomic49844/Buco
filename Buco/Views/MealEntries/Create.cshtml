@@ -1,0 +1,56 @@
+﻿@model Buco.Models.MealEntry
+@{
+    ViewData["Title"] = "Create meal entry";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="Home"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>Create a new meal entry!</h2>
+    <br />
+    @if (ViewBag.NoPets != null && ViewBag.NoPets)
+    {
+        <div class="text-center">
+            <p></p>
+            <i class="fas fa-utensils text-muted" style="font-size:300px"></i>
+            <p></p>
+            <h1 class="text-primary">You don't have any pets!</h1>
+            <p>To start creating meal entries, you first need to create a pet!</p>
+            <p><a asp-action="Create" asp-controller="Pets">Create a new pet!</a></p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="PetId" class="control-label"></label>
+                        <select asp-for="PetId" class="form-control" asp-items="ViewBag.PetId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Calories" class="control-label"></label>
+                        <input asp-for="Calories" class="form-control" />
+                        <span asp-validation-for="Calories" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="text-center">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-8">
+                <img style="width: 100%; display: block;" class="img-fluid" src="~/images/raw-food-diet-cats.jpg" />
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

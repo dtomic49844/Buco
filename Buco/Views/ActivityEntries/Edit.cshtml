@@ -1,0 +1,42 @@
+﻿@model Buco.Models.ActivityEntry
+@{
+    ViewData["Title"] = "Edit activity entry";
+    CultureInfo nonInvariantCulture = new CultureInfo("en-US");
+    Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
+}
+
+<div class="wrapper">
+    <a asp-action="Index" asp-controller="EditEntries" asp-route-id="@ViewBag.Page"><i class="fas fa-arrow-left"></i> Back</a>
+    <hr />
+    <h2>Edit activity entry</h2>
+    <br />
+    <div class="row">
+        <div class="col-4">
+            <form asp-action="Edit" asp-controller="ActivityEntries" method="post" asp-route-activityEntryId="@Model.ActivityEntryId" asp-route-page="@ViewBag.Page">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ActivityEntryId" />
+                <input type="hidden" asp-for="ActivityTime" />
+                <div class="form-group">
+                    <label asp-for="ActivityDuration" class="control-label"></label>
+                    <input asp-for="ActivityDuration" class="form-control" />
+                    <span asp-validation-for="ActivityDuration" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="PetId" />
+                <div class="form-group">
+                    <label asp-for="ActivityTypeId" class="control-label"></label>
+                    <select asp-for="ActivityTypeId" class="form-control" asp-items="ViewBag.ActivityTypeId"></select>
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a asp-action="Index" asp-controller="EditEntries" asp-route-id="@ViewBag.Page" class="btn btn-danger">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
